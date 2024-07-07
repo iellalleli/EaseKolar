@@ -1,0 +1,220 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin-top: 30px;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 50 px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
+}
+
+h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #024493;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+}
+
+th, td {
+    padding: 8px; /* Reduced padding */
+    border: 1px solid #ddd;
+    text-align: left;
+    font-size: 12px; /* Reduced font size */
+}
+
+th {
+    background-color: #f0f0f0;
+    font-weight: 600;
+}
+
+button {
+    background-color: #024493;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+button:hover {
+    background-color: #023a7f;
+}
+
+.buttons-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 40px;
+}
+
+.button-wrapper {
+    flex: 1 1 30%;
+    margin-bottom: 20px;
+}
+
+button span {
+    display: block;
+    font-size: 14px;
+    margin-top: 5px;
+    color: #eaeaea;
+}
+
+.navbar {
+    margin: 0 auto; /* Centering the navbar */
+    font-size: 14px;
+    font-weight: 600;
+    width: 100%; /* Full width */
+    background-color: #f0f0f0; /* Lighter background color */
+    padding: 10px 0; /* Adjusted padding for spacing */
+    border-radius: 10px; /* Rounded corners */
+    margin-top: -25px; /* Adjusted margin to align with container top */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar .title-logo {
+    display: flex;
+    align-items: center;
+    margin-left: 20px; /* Adjusted margin for logo alignment */
+}
+
+.logo-img {
+    width: 50px; /* Adjust size as needed */
+    height: 50px; /* Adjust size as needed */
+    margin-right: 10px;
+}
+
+.navbar ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    height: 100%;
+    list-style-type: none;
+}
+
+.navbar ul li {
+    margin: 0 10px;
+}
+
+.navbar ul li a {
+    color: #333; /* Adjusted link color */
+    text-decoration: none;
+    padding: 10px 15px; /* Adjusted padding for links */
+    border-radius: 5px; /* Rounded corners for links */
+    transition: background-color 0.3s ease; /* Smooth transition on hover */
+}
+
+.navbar ul li a:hover {
+    background-color: #ddd; /* Lighter background color on hover */
+}
+
+.small-link {
+    font-size: 14px; /* Smaller font size for smaller links */
+    text-align: center; /* Center align smaller links */
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    button {
+        padding: 8px 16px;
+        font-size: 12px;
+    }
+}
+
+/* Add space before the query results */
+.spacer {
+    height: 20px;
+}
+
+/* Style for the query-container table */
+.query-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.query-container th, .query-container td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.query-container th {
+    background-color: #f0f0f0;
+    font-weight: 600;
+}
+
+.query-container td button {
+    background-color: #024493;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.query-container td button:hover {
+    background-color: #023a7f;
+}
+
+/* Style for the results section */
+#query-result-container {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px; /* Adds space before the results section */
+}
+
+.results-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.results-container th, .results-container td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.results-container th {
+    background-color: #f0f0f0;
+    font-weight: 600;
+}
+
+
