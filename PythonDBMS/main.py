@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, LoginManager, login_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 import datetime
-from sqlalchemy import text
 import pymysql
 
 # App configuration
@@ -28,9 +27,9 @@ class Applicant(db.Model):
     __tablename__ = 'applicants'
     Applicant_ID = db.Column(db.String(20), primary_key=True)
     Applicant_Name = db.Column(db.String(100), nullable=False)
-    GradeLvlApplied = db.Column(db.Integer, nullable=False)
+    GradeLvlApplied = db.Column(db.Integer(), nullable=False)
     Citizenship = db.Column(db.String(20), nullable=False)
-    Sex = db.Column(db.String(2), nullable=False)
+    Sex = db.Column(db.Enum('M','F','NB'), nullable=False)
     Birthdate = db.Column(db.Date, nullable=False)
     Birthplace = db.Column(db.String(50), nullable=False)
     PermanentAddress = db.Column(db.String(120), nullable=False)
@@ -59,7 +58,7 @@ class School(db.Model):
     __tablename__ = 'schools'
     School_ID = db.Column(db.String(20), primary_key=True)
     SchoolName = db.Column(db.String(50), nullable=False)
-    SchoolType = db.Column(db.String(2), nullable=False)
+    SchoolType = db.Column(db.Enum('Pb','Pr'), nullable=False)
     SchoolAddress = db.Column(db.String(120), nullable=False)
     SchoolEmail = db.Column(db.String(30), nullable=False)
     SchoolPhoneNo = db.Column(db.String(15), nullable=False)
@@ -76,16 +75,15 @@ class School(db.Model):
             new_id = "SCH000001"
         return new_id
 
-
 class Parent(db.Model):
     __tablename__ = 'parents'
     Applicant_ID = db.Column(db.String(20), db.ForeignKey('applicants.Applicant_ID'), nullable=False)
     Parent_ID = db.Column(db.String(20), primary_key=True)
-    ParentType = db.Column(db.String(2), nullable=False)
+    ParentType = db.Column(db.Enum('FF','MM','GG'), nullable=False)
     PrName = db.Column(db.String(50), nullable=False)
     PrContactNo = db.Column(db.String(12), nullable=False)
     PrEmail = db.Column(db.String(30), nullable=False)
-    PrNatureOfWork = db.Column(db.String(2))
+    PrNatureOfWork = db.Column(db.Enum('SE','E','NA'), nullable=False)
     PrOccupation = db.Column(db.String(50))
     PrCompanyName = db.Column(db.String(50))
     PrCompanyAddress = db.Column(db.String(120))
@@ -93,7 +91,6 @@ class Parent(db.Model):
     PrHighestEducAttainment = db.Column(db.String(30))
     PrSchoolGradFrom = db.Column(db.String(50))
     PrYearGraduated = db.Column(db.String(10))
-
     __table_args__ = (
         db.UniqueConstraint('Applicant_ID', 'ParentType', 'PrName', 'PrEmail', name='unique_parent'),
     )
@@ -114,12 +111,11 @@ class SiblingNLS(db.Model):
     SiblingNLS_ID = db.Column(db.String(20), primary_key=True)
     SbName_NLS = db.Column(db.String(40), nullable=False)
     SbAge_NLS = db.Column(db.Integer, nullable=False)
-    SbCivilStatus_NLS = db.Column(db.String(1), nullable=False)
+    SbCivilStatus_NLS = db.Column(db.Enum('S','M','W','D'), nullable=False)
     SbHighestEducAttainment = db.Column(db.String(30), nullable=False)
-    SbNatureOfWork = db.Column(db.String(2), nullable=False)
+    SbNatureOfWork = db.Column(db.Enum('SE','E','NA'), nullable=False)
     SbCompany = db.Column(db.String(50), nullable=False)
     SbGrossAnnualIncome = db.Column(db.Numeric(10, 2), nullable=False)
-
     __table_args__ = (
         db.UniqueConstraint('Applicant_ID', 'SbName_NLS', 'SbAge_NLS', name='unique_sibling_nls'),
     )
@@ -133,19 +129,18 @@ class SiblingNLS(db.Model):
         else:
             new_id = "NLS000001"
         return new_id
-    
+
 class SiblingSS(db.Model):
     __tablename__ = 'siblings_ss'
     Applicant_ID = db.Column(db.String(20), db.ForeignKey('applicants.Applicant_ID'), nullable=False)
     SiblingSS_ID = db.Column(db.String(20), primary_key=True)
     SbName_SS = db.Column(db.String(40), nullable=False)
     SbAge_SS = db.Column(db.Integer, nullable=False)
-    SbCivilStatus_SS = db.Column(db.String(1), nullable=False)
+    SbCivilStatus_SS = db.Column(db.Enum('S','M','W','D'), nullable=False)
     SbYearLevel = db.Column(db.String(30), nullable=False)
     SbSchoolName = db.Column(db.String(50), nullable=False)
     SbAnnualTuition = db.Column(db.Numeric(8, 2), nullable=True)
     SbTuitionPaidBy = db.Column(db.String(30), nullable=False)
-
     __table_args__ = (
         db.UniqueConstraint('Applicant_ID', 'SbName_SS', 'SbAge_SS', name='unique_sibling_ss'),
     )
@@ -160,7 +155,6 @@ class SiblingSS(db.Model):
             new_id = "SS000001"
         return new_id
 
-
 class Admin(UserMixin):
     id = "admin"
 
@@ -170,19 +164,18 @@ def load_user(user_id):
         return Admin()
     return Applicant.query.get(user_id)
 
-
 # Define SQL queries as SQLAlchemy text objects or strings
 SQL_QUERIES = {
-    'easy1': "SELECT * FROM easekolar.applicants WHERE GradeLvlApplied IN (7,8,9,10) ORDER BY GradeLvlApplied;",
-    'easy2': "SELECT * FROM easekolar.applicants WHERE GradeLvlApplied IN (11,12) ORDER BY GradeLvlApplied DESC;",
-    'easy3': "SELECT Applicant_ID FROM easekolar.parents WHERE PrNatureOfWork = 'NA';",
-    'moderate1': "SELECT GradeLvlApplied, COUNT(*) as 'Number of Applicants' FROM easekolar.applicants GROUP BY GradeLvlApplied ORDER BY GradeLvlApplied;",
-    'moderate2': "SELECT School_ID, COUNT(*) as 'Number of Applicants' FROM easekolar.applicants GROUP BY School_ID;",
-    'moderate3': "SELECT Applicant_ID, COUNT(*) as 'Number of Siblings Still Studying' FROM easekolar.siblings_ss GROUP BY Applicant_ID;",
-    'moderate4': "SELECT Applicant_ID, SUM(PrGrossAnnualIncome) as 'Parents Total Annual Income' FROM easekolar.parents GROUP BY Applicant_ID HAVING SUM(PrGrossAnnualIncome) < 900000;",
-    'difficult1': "SELECT A.Applicant_ID, A.Applicant_Name, S.SchoolName FROM easekolar.applicants A, easekolar.schools S WHERE A.School_ID = S.School_ID AND (S.SchoolName LIKE '%Science%' OR S.SchoolType = 'Pb');",
-    'difficult2': "SELECT A.Applicant_ID, A.Applicant_Name, COUNT(Sibling.Applicant_ID) AS 'Number of Siblings' FROM easekolar.applicants A LEFT JOIN (SELECT Applicant_ID FROM easekolar.siblings_nls UNION ALL SELECT Applicant_ID FROM easekolar.siblings_ss) Sibling ON A.Applicant_ID = Sibling.Applicant_ID GROUP BY A.Applicant_ID, A.Applicant_Name;",
-    'difficult3': "SELECT A.Applicant_ID, A.Applicant_Name, S.SchoolName, SUM(P.PrGrossAnnualIncome) as 'Parents Total Annual Income' FROM easekolar.applicants A, easekolar.schools S, easekolar.parents P WHERE A.Applicant_ID = P.Applicant_ID AND A.School_ID = S.School_ID AND (S.SchoolType = 'Pb' OR S.SchoolName LIKE '%Science%') GROUP BY Applicant_ID HAVING SUM(P.PrGrossAnnualIncome) <= 900000 ORDER BY SUM(P.PrGrossAnnualIncome);",
+    'easy1': "SELECT * FROM applicants WHERE GradeLvlApplied IN (7,8,9,10) ORDER BY GradeLvlApplied;",
+    'easy2': "SELECT * FROM applicants WHERE GradeLvlApplied IN (11,12) ORDER BY GradeLvlApplied DESC;",
+    'easy3': "SELECT Applicant_ID FROM parents WHERE PrNatureOfWork = 'NA';",
+    'moderate1': "SELECT GradeLvlApplied, COUNT(*) as 'Number of Applicants' FROM applicants GROUP BY GradeLvlApplied ORDER BY GradeLvlApplied;",
+    'moderate2': "SELECT s.School_ID, COUNT(*) as 'Number of Applicants', SchoolName FROM applicants a, schools s WHERE a.School_ID = s.School_ID GROUP BY School_ID, SchoolName;",
+    'moderate3': "SELECT Applicant_ID, COUNT(*) as 'Number of Siblings Still Studying' FROM siblings_ss GROUP BY Applicant_ID;",
+    'moderate4': "SELECT Applicant_ID, SUM(PrGrossAnnualIncome) as 'Parents Total Annual Income' FROM parents GROUP BY Applicant_ID HAVING SUM(PrGrossAnnualIncome) < 900000;",
+    'difficult1': "SELECT A.Applicant_ID, A.Applicant_Name, S.SchoolName FROM applicants A, schools S WHERE A.School_ID = S.School_ID AND (S.SchoolName LIKE '%Science%' OR S.SchoolType = 'Pb');",
+    'difficult2': "SELECT A.Applicant_ID, A.Applicant_Name, COUNT(Sibling.Applicant_ID) AS 'Number of Siblings' FROM applicants A LEFT JOIN (SELECT Applicant_ID FROM siblings_nls UNION ALL SELECT Applicant_ID FROM siblings_ss) Sibling ON A.Applicant_ID = Sibling.Applicant_ID GROUP BY A.Applicant_ID, A.Applicant_Name;",
+    'difficult3': "SELECT A.Applicant_ID, A.Applicant_Name, S.SchoolName, SUM(P.PrGrossAnnualIncome) as 'Parents Total Annual Income' FROM applicants A, schools S, parents P WHERE A.Applicant_ID = P.Applicant_ID AND A.School_ID = S.School_ID AND (S.SchoolType = 'Pb' OR S.SchoolName LIKE '%Science%') GROUP BY Applicant_ID HAVING SUM(P.PrGrossAnnualIncome) <= 900000 ORDER BY SUM(P.PrGrossAnnualIncome);"
 }
 
 # Routes
@@ -194,16 +187,10 @@ def dbconnect():
     except Exception as e:
         return f'Database connection failed. Error: {str(e)}'
 
-
-@app.route('/static/home.html')
-@app.route('/home.html')
 @app.route('/')
 def home():
     return render_template('home.html')
 
-
-@app.route('/admin', methods=['GET', 'POST'])
-@app.route('/static/admin-page/admin.html', methods=['GET', 'POST'])
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
     if request.method == "POST":
@@ -213,10 +200,8 @@ def admin():
             login_user(Admin())
             return redirect(url_for('show_database'))
         flash('Invalid credentials')
-    return render_template('/admin.html')
+    return render_template('admin.html')
 
-
-# Route to display database tables
 @app.route('/database')
 def show_database():
     applicants = Applicant.query.all()  
@@ -230,32 +215,29 @@ def show_database():
 
 @app.route('/update_record/<table>/<record_id>', methods=['POST'])
 def update_record(table, record_id):
-    # Assuming you have SQLAlchemy models defined, adjust the code accordingly
     if table == 'applicants':
         record = Applicant.query.get(record_id)
     elif table == 'parents':
         record = Parent.query.get(record_id)
     elif table == 'schools':
         record = School.query.get(record_id)
-    # Add similar conditions for other tables (siblings_nls, siblings_ss) if needed
+    elif table == 'siblings_nls':
+        record = SiblingNLS.query.get(record_id)
+    elif table == 'siblings_ss':
+        record = SiblingSS.query.get(record_id)
 
     if not record:
         return jsonify({'success': False, 'error': f'Record with ID {record_id} not found.'}), 404
 
     try:
-        # Update record fields based on the data received in the POST request
         data = request.json
         for key, value in data.items():
             setattr(record, key, value)
-        
         db.session.commit()
         return jsonify({'success': True}), 200
     except Exception as e:
         db.session.rollback()
         return jsonify({'success': False, 'error': str(e)}), 500
-    finally:
-        db.session.close()
-
 
 @app.route('/delete_record/<table>/<record_id>', methods=['DELETE'])
 def delete_record(table, record_id):
@@ -280,35 +262,29 @@ def delete_record(table, record_id):
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
-# Route to execute SQL queries
 @app.route('/execute-query', methods=['POST'])
 def execute_query():
     try:
         data = request.json
-        query_key = data.get('query_name')  # Ensure correct variable name
+        query_key = data.get('query_name')
 
-        # Ensure the query key exists in SQL_QUERIES
         if query_key in SQL_QUERIES:
             query = SQL_QUERIES[query_key]
 
-            # Connect to MySQL database
             conn = pymysql.connect(
                 host='localhost',
                 user='root',
-                password='Mariella123',
-                database='easekolar',
+                password='password',
+                database='trial_database',
                 cursorclass=pymysql.cursors.DictCursor
             )
             cursor = conn.cursor()
-
-            # Execute the SQL query
             cursor.execute(query)
             results = cursor.fetchall()
-
             cursor.close()
             conn.close()
 
-            return jsonify({'success': True, 'data': results})  # Return JSON response
+            return jsonify({'success': True, 'data': results})
 
         else:
             return jsonify({'success': False, 'error': f'Query {query_key} not found'})
@@ -316,11 +292,18 @@ def execute_query():
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
+@app.route('/apply')
+def apply():
+    return render_template('apply.html')
+
+@app.route('/Success')
+def Success():
+    return render_template('submission.html')
+
 @app.route('/AppForm', methods=['GET', 'POST'])
 def AppForm():
     if request.method == 'POST':
         try:
-            # Check if school already exists
             existing_school = School.query.filter_by(
                 SchoolName=request.form['school-grad-from'],
                 SchoolEmail=request.form['school-email']
@@ -341,7 +324,6 @@ def AppForm():
                 db.session.add(school)
                 db.session.flush()
 
-            # Check if applicant already exists
             existing_applicant = Applicant.query.filter_by(
                 Applicant_Name=request.form['applicant-name'],
                 Birthdate=datetime.datetime.strptime(request.form['birthdate'], '%Y-%m-%d').date(),
@@ -352,7 +334,6 @@ def AppForm():
                 flash('An application with this name, birthdate, and email already exists.')
                 return render_template('apply-form.html')
 
-            # Process applicant data
             applicant_data = {
                 'Applicant_ID': Applicant.generate_id(),
                 'Applicant_Name': request.form['applicant-name'],
@@ -374,13 +355,11 @@ def AppForm():
             db.session.add(new_applicant)
             db.session.flush()
 
-            # Process parent data
             if not process_parent_data(new_applicant.Applicant_ID):
                 db.session.rollback()
                 flash('A parent with the same information already exists.')
                 return render_template('apply-form.html')
 
-            # Process sibling data
             if not process_sibling_data(new_applicant.Applicant_ID):
                 db.session.rollback()
                 flash('A sibling with the same information already exists.')
@@ -388,7 +367,7 @@ def AppForm():
 
             db.session.commit()
             flash('Application submitted successfully')
-            return render_template('home.html')
+            return render_template('submission.html')
 
         except Exception as e:
             db.session.rollback()
@@ -401,7 +380,7 @@ def process_parent_data(applicant_id):
     parent_count = len(request.form.getlist('parentguardian-name[]'))
     for i in range(parent_count):
         parent_data = {
-            'Parent_ID': Parent.generate_id(),  # 'PAR000001
+            'Parent_ID': Parent.generate_id(),
             'Applicant_ID': applicant_id,
             'ParentType': request.form.getlist(f'parent-type-{i}')[0],
             'PrName': request.form.getlist('parentguardian-name[]')[i],
@@ -423,7 +402,6 @@ def process_parent_data(applicant_id):
             PrEmail=parent_data['PrEmail']
         ).first()
         if existing_parent:
-            # Update existing parent info if needed
             for key, value in parent_data.items():
                 setattr(existing_parent, key, value)
         else:
@@ -432,12 +410,11 @@ def process_parent_data(applicant_id):
     return True
 
 def process_sibling_data(applicant_id):
-    # Process siblings no longer studying (NLS)
     for key in request.form:
         if key.startswith('sibling-nls-name['):
             index = key[len('sibling-nls-name['):-1]
             sibling_nls_data = {
-                'SiblingNLS_ID': SiblingNLS.generate_id(),  # 'NLS000001
+                'SiblingNLS_ID': SiblingNLS.generate_id(),
                 'Applicant_ID': applicant_id,
                 'SbName_NLS': request.form.get(f'sibling-nls-name[{index}]'),
                 'SbAge_NLS': int(request.form.get(f'sibling-nls-age[{index}]') or 0),
@@ -453,19 +430,17 @@ def process_sibling_data(applicant_id):
                 SbAge_NLS=sibling_nls_data['SbAge_NLS']
             ).first()
             if existing_sibling_nls:
-                # Update existing sibling info if needed
                 for key, value in sibling_nls_data.items():
                     setattr(existing_sibling_nls, key, value)
             else:
                 sibling_nls = SiblingNLS(**sibling_nls_data)
                 db.session.add(sibling_nls)
 
-    # Process siblings still studying (SS)
     for key in request.form:
         if key.startswith('sibling-ss-name['):
             index = key[len('sibling-ss-name['):-1]
             sibling_ss_data = {
-                'SiblingSS_ID': SiblingSS.generate_id(),  # 'SS000001
+                'SiblingSS_ID': SiblingSS.generate_id(),
                 'Applicant_ID': applicant_id,
                 'SbName_SS': request.form.get(f'sibling-ss-name[{index}]'),
                 'SbAge_SS': int(request.form.get(f'sibling-ss-age[{index}]') or 0),
@@ -481,7 +456,6 @@ def process_sibling_data(applicant_id):
                 SbAge_SS=sibling_ss_data['SbAge_SS']
             ).first()
             if existing_sibling_ss:
-                # Update existing sibling info if needed
                 for key, value in sibling_ss_data.items():
                     setattr(existing_sibling_ss, key, value)
             else:
@@ -489,5 +463,6 @@ def process_sibling_data(applicant_id):
                 db.session.add(sibling_ss)
 
     return True
+
 if __name__ == '__main__':
-     app.run(debug=True)
+    app.run(debug=True)

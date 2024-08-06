@@ -31,6 +31,7 @@ body {
 }
 
 .title-logo h1 {
+    font-weight: 600;
     font-size: 35px;
 }
 
@@ -46,7 +47,7 @@ body {
 .buttons button {
     font-family: Poppins;
     font-size: 18px;
-    font-weight: 500;
+    font-weight: 600;
     color: #024493;
     background: white;
     width: 150px;
@@ -91,66 +92,23 @@ input[type=submit]:hover {
 .buttons .next-btn:hover {
     box-shadow: 0 5px 10px rgb(0, 0, 0, 0.3);
 }
- 
-.ar-btngroup {
-    display: flex;
-    margin: 0 0 25px 0;
-}
-
-.ar-btngroup > * {
-    margin: 0 20px 0 0;
-}
 
 .add-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
     font-family: Poppins;
-    font-size: 18px;
-    font-weight: 500;
+    font-size: 15px;
+    font-weight: 600;
     color: white;
-    background: #478de1;
-    padding: 0 20px;
+    background: #024493;
     height: 45px;
+    padding: 0 10px;
+    margin-bottom: 25px;
     border-radius: .5rem;
-    border: 0;
+    border: 2px solid #024493;
     cursor: pointer;
-}
-
-.add-btn img {
-    margin: 0 0 0 10px;
-    width: 30px;
-    height: 30px;
 }
 
 .add-btn:hover {
-    box-shadow: 0 5px 10px rgb(0, 0, 0, 0.2);
-}
-
-.remove-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: Poppins;
-    font-size: 18px;
-    font-weight: 500;
-    color: white;
-    background: #e14747;
-    padding: 0 20px;
-    height: 45px;
-    border-radius: .5rem;
-    border: 0;
-    cursor: pointer;
-}
-
-.remove-btn img {
-    margin: 0 0 0 10px;
-    width: 25px;
-    height: 25px;
-}
-
-.remove-btn:hover {
-    box-shadow: 0 5px 10px rgb(0, 0, 0, 0.2);
+    box-shadow: 0 5px 10px rgb(0, 0, 0, 0.3);
 }
 
 .header {
@@ -166,7 +124,7 @@ input[type=submit]:hover {
 }
 
 .header h1 {
-    font-weight: 50;
+    font-weight: 300;
     margin: 0 20px 0 0;
 }
 
@@ -208,17 +166,10 @@ form .field-group label {
     margin: 0 0 25px 0;
 }
 
-.p-row1 #last-name, .p-row1 #first-name{
-    width: 150px;
-}
-
-.p-row1 #middle-initial {
-    width: 30px;
-}
-
 .p-row1 .input-field {
     display: flex;
     flex-direction: column;
+    width: 300px;
 }
 
 .p-row2 {
@@ -258,23 +209,19 @@ form .field-group label {
     display: flex;
     flex-direction: column;
     width: 300px;
-}
+}   
 
 .p-row5 {
     display: flex;
     justify-content: space-between;
-    width: 1000px;
+    width: 650px;
     margin: 0 0 25px 0;
 }
 
 .p-row5 .input-field {
     display: flex;
     flex-direction: column;
-    width: 475px;
-}   
-
-.p-row5 .field-group input {
-    width: 200px;
+    width: 300px;
 }
 
 .school-info {    
@@ -469,8 +416,12 @@ form .field-group label {
     width: 300px;
 }
 
+.snls-row2 .field-group {
+    width: 325px;
+}
+
 .snls-row2 .field-group label {
-    margin: 0 20px 0 0;
+    margin: 0 10px 0 0;
 }
 
 .snls-row3 {
@@ -514,7 +465,7 @@ form .field-group label {
 .sss-row2 {
     display: flex;
     justify-content: space-between;
-    width: 1000px;
+    width: 650px;
     margin: 0 0 25px 0;
 }
 
@@ -583,7 +534,7 @@ form .field-group label {
 .cancel-btn button {
     font-family: Poppins;
     font-size: 18px;
-    font-weight: 500;
+    font-weight: 600;
     color: #024493;
     background: white;
     width: 150px;

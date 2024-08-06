@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     // Show the initial step on page load
     document.querySelector(".personal-info").classList.add("show");
-
+ 
     let currentStep = 0;
     const steps = [
         "personal-info",
@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function() {
         "sibling-info",
         "scholarship-application"
     ];
-
+ 
     function showStep(step) {
         steps.forEach((stepId, index) => {
             const element = document.getElementById(stepId);
@@ -21,36 +21,61 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     }
-
+ 
+    document.querySelectorAll(".back-btn").forEach(button => {
+        button.addEventListener("click", function(e) {
+            e.preventDefault();
+            if (currentStep > 0) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        });
+    });
+ 
+    document.querySelectorAll("#cancel-btn").forEach(button => {
+        button.addEventListener("click", function(e) {
+            e.preventDefault();
+            showPopup("cancel-popup");
+        });
+    });
+ 
+    document.querySelectorAll("#continue-btn").forEach(button => {
+        button.addEventListener("click", function(e) {
+            e.preventDefault();
+            hidePopup("cancel-popup");
+        });
+    });
+ 
+ 
     function showPopup(popupId) {
         document.getElementById(popupId).classList.add("show");
     }
-
+ 
     function hidePopup(popupId) {
         document.getElementById(popupId).classList.remove("show");
     }
-
+ 
     let parentCount = 0;
-
+ 
     function addParentSection() {
         const container = document.getElementById('parent-guardian-container');
         const template = document.getElementById('parent-template');
         const clone = template.content.cloneNode(true);
-        
+       
         const elements = clone.querySelectorAll('[id], [for], [name]');
         elements.forEach(el => {
             if (el.id) el.id = el.id.replace('{index}', parentCount);
             if (el.htmlFor) el.htmlFor = el.htmlFor.replace('{index}', parentCount);
             if (el.name) el.name = el.name.replace('{index}', parentCount);
         });
-
+ 
         container.appendChild(clone);
         parentCount++;
     }
-
+ 
     addParentSection();
     document.getElementById('add-parent-btn').addEventListener('click', addParentSection);
-
+ 
     document.querySelectorAll(".next-btn").forEach(button => {
         button.addEventListener("click", function(e) {
             e.preventDefault();
@@ -60,16 +85,16 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
-
+ 
     let siblingNLSCount = 0;
     let siblingSiblingCount = 0;
-
+ 
     function addSibling(type) {
         const container = document.getElementById(`sibling-${type}-container`);
         const template = document.getElementById(`sibling-${type}-template`).content.cloneNode(true);
         const elements = template.querySelectorAll('[id], [for], [name]');
         const count = type === 'nls' ? siblingNLSCount : siblingSiblingCount;
-
+ 
         elements.forEach((element) => {
             if (element.id) {
                 element.id = element.id.replace('{index}', count);
@@ -81,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 element.name = element.name.replace('{index}', `[${count}]`);
             }
         });
-
+ 
         container.appendChild(template);
         if (type === 'nls') {
             siblingNLSCount++;
@@ -89,45 +114,18 @@ document.addEventListener("DOMContentLoaded", function() {
             siblingSiblingCount++;
         }
     }
-
+ 
     document.getElementById('add-sibling-nls-btn').addEventListener('click', function() {
         addSibling('nls');
     });
-
+ 
     document.getElementById('add-sibling-ss-btn').addEventListener('click', function() {
         addSibling('ss');
-    });
-
-    document.querySelectorAll(".back-btn").forEach(button => {
-        button.addEventListener("click", function(e) {
-            e.preventDefault();
-            if (currentStep > 0) {
-                currentStep--;
-                showStep(currentStep);
-            }
-        });
-    });
-
-    document.querySelectorAll(".cancel-btn").forEach(button => {
-        button.addEventListener("click", function(e) {
-            e.preventDefault();
-            showPopup("cancel-popup");
-        });
-    });
-
-    document.getElementById("continue-btn").addEventListener("click", function(e) {
-        e.preventDefault();
-        hidePopup("cancel-popup");
-    });
-
-    document.getElementById("home-btn").addEventListener("click", function(e) {
-        e.preventDefault();
-        window.location.href = '/'; // Adjust the URL to your home page
     });
 
     document.getElementById('submit-btn').addEventListener('click', function(e) {
         e.preventDefault();
         document.getElementById('scholarship-form').submit();
     });
-
+ 
 });

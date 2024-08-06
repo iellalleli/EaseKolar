@@ -1,53 +1,132 @@
+
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-    margin-top: 30px;
+    font-family: Poppins;
+    background-color: #f2f2f2;
 }
 
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 50 px;
-    padding: 20px;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-top: 50px;
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background: white;
+    box-shadow: 0 0 10px rgb(0, 0, 0, 0.1);
 }
 
-h1 {
-    font-size: 32px;
-    font-weight: 700;
+.title-logo {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 200px;
+}
+
+.title-logo img {
+    width: 50px;
+    height: 50px;
+}
+
+.title-logo h1 {
+    font-weight: 600;
+    font-size: 25px;
+}
+
+.blue-text {
     color: #024493;
+}
+
+.navbar ul {
+    display: flex;
+    flex-direction: row;
+    font-weight: 530;
+    list-style: none;
+    width: 970px;
+}
+
+.navbar ul li a {
+    color: black;
+    margin: 0 10px;
+    padding: 10px 10px;
+    text-decoration: none;
+    border-radius: 10px;
+}
+
+.navbar .logout {
+    color: white;
+    background: #024493;
+}
+
+.navbar ul li a:hover {
+    background: #0243933f;
+}
+
+.navbar .logout:hover {
+    background: #024493;
+    box-shadow: 0 5px 10px rgb(0, 0, 0, 0.3);
+}
+
+.spacer {
+    height: 100px;
+}
+
+.box {
+    width: 90%;
+    padding: 25px;
+    margin: 50px auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgb(0, 0, 0, 0.1);
+}
+
+.box h1 {
+    color: #024493;
+    font-weight: 600;
+    text-align: center;
     margin-bottom: 20px;
+}
+
+.box#applicant-box {
+    margin-top: 25px;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
 }
 
 th, td {
-    padding: 8px; /* Reduced padding */
+    padding: 8px;
     border: 1px solid #ddd;
     text-align: left;
-    font-size: 12px; /* Reduced font size */
+    font-size: 12px;
 }
 
 th {
-    background-color: #f0f0f0;
-    font-weight: 600;
+    font-weight: 530;
+    background-color: #f2f2f2;
+}
+
+.scrollable {
+    max-height: 400px;
+    overflow-y: auto;
 }
 
 button {
+    font-family: Poppins;
     background-color: #024493;
     color: #fff;
     padding: 10px 20px;
@@ -62,18 +141,6 @@ button:hover {
     background-color: #023a7f;
 }
 
-.buttons-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 40px;
-}
-
-.button-wrapper {
-    flex: 1 1 30%;
-    margin-bottom: 20px;
-}
-
 button span {
     display: block;
     font-size: 14px;
@@ -81,60 +148,56 @@ button span {
     color: #eaeaea;
 }
 
-.navbar {
-    margin: 0 auto; /* Centering the navbar */
+.create {
+    font-family: Poppins;
+    background-color: #024493;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 50px;
+    padding: 5px 10px;
     font-size: 14px;
-    font-weight: 600;
-    width: 100%; /* Full width */
-    background-color: #f0f0f0; /* Lighter background color */
-    padding: 10px 0; /* Adjusted padding for spacing */
-    border-radius: 10px; /* Rounded corners */
-    margin-top: -25px; /* Adjusted margin to align with container top */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.navbar .title-logo {
-    display: flex;
-    align-items: center;
-    margin-left: 20px; /* Adjusted margin for logo alignment */
-}
-
-.logo-img {
-    width: 50px; /* Adjust size as needed */
-    height: 50px; /* Adjust size as needed */
-    margin-right: 10px;
-}
-
-.navbar ul {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    height: 100%;
-    list-style-type: none;
-}
-
-.navbar ul li {
-    margin: 0 10px;
-}
-
-.navbar ul li a {
-    color: #333; /* Adjusted link color */
     text-decoration: none;
-    padding: 10px 15px; /* Adjusted padding for links */
-    border-radius: 5px; /* Rounded corners for links */
-    transition: background-color 0.3s ease; /* Smooth transition on hover */
 }
 
-.navbar ul li a:hover {
-    background-color: #ddd; /* Lighter background color on hover */
+.create:hover {
+    background-color: #023a7f;
 }
 
-.small-link {
-    font-size: 14px; /* Smaller font size for smaller links */
-    text-align: center; /* Center align smaller links */
+.buttons-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.button-wrapper {
+    flex: 1 1 calc(33.333% - 10px);
+}
+
+.button-wrapper button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.button-wrapper button:hover {
+    background-color: #45a049;
+}
+
+.button-wrapper span {
+    display: block;
+    font-size: 12px;
+    color: #ddd;
 }
 
 @media (max-width: 768px) {
@@ -150,11 +213,6 @@ button span {
         padding: 8px 16px;
         font-size: 12px;
     }
-}
-
-/* Add space before the query results */
-.spacer {
-    height: 20px;
 }
 
 /* Style for the query-container table */
@@ -201,6 +259,11 @@ button span {
     margin-top: 20px; /* Adds space before the results section */
 }
 
+#query-result-container h2 {
+    color: #024493;
+    font-weight: 600;
+}
+
 .results-container table {
     width: 100%;
     border-collapse: collapse;
@@ -217,4 +280,19 @@ button span {
     font-weight: 600;
 }
 
+.query-results {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
 
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.action-buttons button {
+    padding: 5px 10px;
+    font-size: 14px;
+}
